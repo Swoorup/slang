@@ -1372,6 +1372,13 @@ public:
         SourceLoc loc,
         bool& outDiagnosed);
 
+    bool isWitnessUncheckedOptional(SubtypeWitness* witness);
+    LookupResult filterLookupResultByCheckedOptional(const LookupResult& lookupResult);
+    LookupResult filterLookupResultByCheckedOptionalAndDiagnose(
+        const LookupResult& lookupResult,
+        SourceLoc loc,
+        bool& outDiagnosed);
+
     Val* resolveVal(Val* val)
     {
         if (!val)
@@ -1892,6 +1899,11 @@ public:
         DeclRef<CallableDecl> requirement,
         DeclRef<CallableDecl> method);
 
+    void markOverridingDecl(
+        ConformanceCheckingContext* context,
+        Decl* memberDecl,
+        DeclRef<Decl> requiredMemberDeclRef);
+
     /// Attempt to synthesize a method that can satisfy `requiredMemberDeclRef` using
     /// `lookupResult`.
     ///
@@ -2094,6 +2106,11 @@ public:
     bool checkConformance(Type* type, InheritanceDecl* inheritanceDecl, ContainerDecl* parentDecl);
 
     void checkExtensionConformance(ExtensionDecl* decl);
+
+    void calcOverridableCompletionCandidates(
+        Type* aggType,
+        ContainerDecl* aggTypeDecl,
+        Decl* memberDecl);
 
     void checkAggTypeConformance(AggTypeDecl* decl);
 
@@ -2640,6 +2657,7 @@ public:
     struct ValUnificationContext
     {
         Index indexInTypePack = 0;
+        bool optionalConstraint = false;
     };
 
     // Try to find a unification for two values

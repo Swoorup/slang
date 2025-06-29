@@ -845,9 +845,18 @@ DIAGNOSTIC(
 DIAGNOSTIC(
     30301,
     Error,
-    isAsOperatorCannotUseInterfaceAsRHS,
-    "'is' and 'as' operators do not support interface types as the right-hand side. Use a concrete "
-    "type instead.")
+    isOperatorCannotUseInterfaceAsRHS,
+    "cannot use 'is' operator with an interface type as the right-hand "
+    "side without a corresponding optional constraint. Use a concrete type "
+    "instead, or add an optional constraint for the interface type.")
+
+DIAGNOSTIC(
+    30302,
+    Error,
+    asOperatorCannotUseInterfaceAsRHS,
+    "cannot use 'as' operator with an interface type as the right-hand "
+    "side. Use a concrete type instead. If you want to use an optional "
+    "constraint, use an 'if (T is IInterface)' block instead.")
 
 DIAGNOSTIC(33070, Error, expectedFunction, "expected a function, got '$0'")
 
@@ -1507,6 +1516,17 @@ DIAGNOSTIC(
     "requirement in the form of a simple value must be declared as 'static const'.")
 DIAGNOSTIC(30310, Error, typeIsNotDifferentiable, "type '$0' is not differentiable.")
 
+DIAGNOSTIC(
+    30311,
+    Error,
+    nonMethodInterfaceRequirementCannotHaveBody,
+    "non-method interface requirement cannot have a body.")
+DIAGNOSTIC(
+    30312,
+    Error,
+    interfaceRequirementCannotBeOverride,
+    "interface requirement cannot override a base declaration.")
+
 // Interop
 DIAGNOSTIC(
     30400,
@@ -1599,6 +1619,12 @@ DIAGNOSTIC(
     Error,
     invalidConstraintSubType,
     "type '$0' is not a valid left hand side of a type constraint.")
+DIAGNOSTIC(
+    30403,
+    Error,
+    requiredConstraintIsNotChecked,
+    "the constraint providing '$0' is optional and must be checked with an 'is' statement before "
+    "usage.")
 
 // 305xx: initializer lists
 DIAGNOSTIC(30500, Error, tooManyInitializers, "too many initializers (expected $0, got $1)")
@@ -1731,6 +1757,17 @@ DIAGNOSTIC(
     invalidExtensionOnInterface,
     "cannot extend interface type '$0'. consider using a generic extension: `extension<T:$0> T "
     "{...}`.")
+DIAGNOSTIC(
+    30853,
+    Error,
+    missingOverride,
+    "missing 'override' keyword for methods that overrides the default implementation in the "
+    "interface.")
+DIAGNOSTIC(
+    30854,
+    Error,
+    overrideModifierNotOverridingBaseDecl,
+    "'$0' marked as 'override' is not overriding any base declarations.")
 
 // 309xx: subscripts
 DIAGNOSTIC(

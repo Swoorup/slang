@@ -417,6 +417,10 @@ constexpr bool anyOf(Range&& range, Predicate&& pred)
     }
     return false;
 }
+
+IRType* getUnsignedTypeFromSignedType(IRBuilder* builder, IRType* type);
+
+bool isSignedType(IRType* type);
 } // namespace Slang
 
 #endif
