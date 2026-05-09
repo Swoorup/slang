@@ -2708,7 +2708,6 @@ void legalizeDefUse(IRGlobalValueWithCode* func, TargetProgram* target)
                 // instead of before the `if`. This situation can occur in the IR if
                 // the original code is lowered from a `do-while` loop.
                 //
-                bool shouldInitializeVar = false;
                 if (loopHeaderBlockMap.containsKey(commonDominator))
                 {
                     bool shouldMoveToHeader = false;
@@ -2729,7 +2728,6 @@ void legalizeDefUse(IRGlobalValueWithCode* func, TargetProgram* target)
                     if (shouldMoveToHeader)
                     {
                         commonDominator = loopHeaderBlockMap[commonDominator];
-                        shouldInitializeVar = true;
                     }
                 }
 
@@ -2740,16 +2738,6 @@ void legalizeDefUse(IRGlobalValueWithCode* func, TargetProgram* target)
                     // common dominator.
                     if (var->getParent() != commonDominator)
                         var->insertBefore(commonDominator->getTerminator());
-
-                    if (shouldInitializeVar)
-                    {
-                        IRBuilder builder(func);
-                        builder.setInsertAfter(var);
-                        builder.emitStore(
-                            var,
-                            builder.emitDefaultConstruct(
-                                as<IRPtrTypeBase>(var->getDataType())->getValueType()));
-                    }
                 }
                 else if (shouldDuplicateInstAtUseSite(inst, target))
                 {
@@ -2795,8 +2783,6 @@ void legalizeDefUse(IRGlobalValueWithCode* func, TargetProgram* target)
                     IRBuilder builder(func);
                     builder.setInsertBefore(commonDominator->getTerminator());
                     IRVar* tempVar = builder.emitVar(inst->getFullType());
-                    auto defaultVal = builder.emitDefaultConstruct(inst->getFullType());
-                    builder.emitStore(tempVar, defaultVal);
 
                     traverseUses(
                         inst,
