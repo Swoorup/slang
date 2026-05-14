@@ -17962,6 +17962,9 @@ static void checkDerivativeAttribute(
                         fullCtxType),
                     false,
                     synthesizedVisibility.memberVisibility);
+
+                // Force conformance checking for BwdCallable.operator() on this context.
+                visitor->ensureDecl(synContextStruct, DeclCheckState::ReadyForConformances);
             }
         }
     }
